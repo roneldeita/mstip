@@ -2,9 +2,9 @@
 
 //session_start();
 
-Class Auth extends CI_Controller {
+class Auth extends CI_Controller {
 
-  public function __construct() 
+  public function __construct()
   {
     parent::__construct();
     // security helper
@@ -19,6 +19,7 @@ Class Auth extends CI_Controller {
     $this->load->library('session');
     // Load database
     $this->load->model('users_model');
+
   }
   // Show registration page
   public function register() {
@@ -32,21 +33,21 @@ Class Auth extends CI_Controller {
 
   // Show login page
   public function login() {
-    //$data['title'] = ucfirst('Login');
+    $data['title'] = ucfirst('Login');
 
-    //$this->load->view('templates/header', $data)
+    $this->load->view('templates/header', $data);
     $this->load->view('login');
-    //$this->load->view('templates/footer');
+    $this->load->view('templates/footer');
   }
   // Validate and store registration data in database
   public function new_user_registration() {
 
     // Check validation for user input in SignUp form
-    $this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
+    $this->form_validation->set_rules('student_id', 'Student ID', 'trim|required|xss_clean');
     $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
     $this->form_validation->set_rules('password', 'Password', 'trim|min_length[6]|max_length[12]|required|xss_clean');
     $data = array(
-      'username' => $this->input->post('username'),
+      'student_id' => $this->input->post('student_id'),
       'email' => $this->input->post('email'),
       'password' => $this->input->post('password')
     );
@@ -64,41 +65,41 @@ Class Auth extends CI_Controller {
     }
   }
 
-  // Check for user login process
-  public function user_login_process() {
+  // Check for user login
+  public function handle_user_login() {
 
-    $this->form_validation->set_rules('username', 'Username', 'trim|required|xss_clean');
+    $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
     $this->form_validation->set_rules('password', 'Password', 'trim|required|xss_clean');
-    
+
     if ($this->form_validation->run() == FALSE) {
       if(isset($this->session->userdata['logged_in'])){
         $this->load->view('admin_page');
       }else{
-        $this->load->view('login_form');
+        $this->load->view('login');
       }
     } else {
       $data = array(
-        'username' => $this->input->post('username'),
+        'email' => $this->input->post('email'),
         'password' => $this->input->post('password')
       );
-      $result = $this->login_database->login($data);
+      $result = $this->users_model->login($data);
       if ($result == TRUE) {
-        $username = $this->input->post('username');
-        $result = $this->login_database->read_user_information($username);
+        $email = $this->input->post('email');
+        $result = $this->users_model->read_user_information($email);
         if ($result != false) {
           $session_data = array(
-            'username' => $result[0]->user_name,
-            'email' => $result[0]->user_email,
+            'email' => $result[0]->email,
+            'student_id' => $result[0]->student_id,
           );
           // Add user data in session
           $this->session->set_userdata('logged_in', $session_data);
-          $this->load->view('admin_page');
+          $this->load->view('secure/dashboard');
         }
       } else {
         $data = array(
           'error_message' => 'Invalid Username or Password'
         );
-        $this->load->view('login_form', $data);
+        $this->load->view('login', $data);
       }
     }
   }
@@ -111,7 +112,7 @@ Class Auth extends CI_Controller {
     );
     $this->session->unset_userdata('logged_in', $sess_array);
     $data['message_display'] = 'Successfully Logout';
-    $this->load->view('login_form', $data);
+    $this->load->view('login', $data);
   }
 }
 

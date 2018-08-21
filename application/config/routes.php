@@ -53,5 +53,6 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['default_controller'] = 'pages/view';
-$route['users'] = 'users';
 $route['(:any)'] = 'pages/view/$1';
+$route['users'] = 'users';
+$route['secure'] = 'secure';
