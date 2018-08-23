@@ -8,21 +8,24 @@ class Secure extends CI_Controller {
   {
     parent::__construct();
     //load url helper
-    $this->load->helper('url_helper');
+    $this->load->helper('url');
     // Load session library
     $this->load->library('session');
     // Load database
     $this->load->model('users_model');
 
   }
-  // Show registration page
+  // Show dashboard page
   public function dashboard() {
 
     $data['title'] = ucfirst('Dashboard');
-
-    $this->load->view('templates/header', $data);
-    $this->load->view('protected/dashboard');
-    $this->load->view('templates/footer');
+    if(isset($this->session->userdata['logged_in'])){
+      $this->load->view('templates/header', $data);
+      $this->load->view('secure/dashboard');
+      $this->load->view('templates/footer');
+    }else{
+      redirect('auth/logout', 'refresh');
+    }
   }
 }
 

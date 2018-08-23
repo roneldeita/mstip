@@ -2,6 +2,7 @@
 
 //session_start();
 
+
 class Auth extends CI_Controller {
 
   public function __construct()
@@ -12,17 +13,16 @@ class Auth extends CI_Controller {
     // Load form helper library
     $this->load->helper('form');
     //load url helper
-    $this->load->helper('url_helper');
+    $this->load->helper('url');
     // Load form validation library
     $this->load->library('form_validation');
     // Load session library
     $this->load->library('session');
     // Load database
     $this->load->model('users_model');
-
   }
   // Show registration page
-  public function register() {
+  public function register($data = array()) {
 
     $data['title'] = ucfirst('Register');
 
@@ -32,13 +32,14 @@ class Auth extends CI_Controller {
   }
 
   // Show login page
-  public function login() {
+  public function login($data = array()) {
     $data['title'] = ucfirst('Login');
 
     $this->load->view('templates/header', $data);
     $this->load->view('login');
     $this->load->view('templates/footer');
   }
+
   // Validate and store registration data in database
   public function new_user_registration() {
 
@@ -52,15 +53,15 @@ class Auth extends CI_Controller {
       'password' => $this->input->post('password')
     );
     if ($this->form_validation->run() == FALSE) {
-      $this->load->view('register', $data);
+        $this->register();
     } else {
       $result = $this->users_model->registration_insert($data);
       if ($result == TRUE) {
         $data['message_display'] = 'Registration Successfully !';
-        $this->load->view('login', $data);
+        $this->login($data);
       } else {
         $data['message_display'] = 'Email already exist!';
-        $this->load->view('register', $data);
+        $this->register($data);
       }
     }
   }
@@ -73,9 +74,9 @@ class Auth extends CI_Controller {
 
     if ($this->form_validation->run() == FALSE) {
       if(isset($this->session->userdata['logged_in'])){
-        $this->load->view('admin_page');
+        redirect('secure/dashboard', 'refresh');
       }else{
-        $this->load->view('login');
+        $this->login();
       }
     } else {
       $data = array(
@@ -93,26 +94,28 @@ class Auth extends CI_Controller {
           );
           // Add user data in session
           $this->session->set_userdata('logged_in', $session_data);
-          $this->load->view('secure/dashboard');
+          if (isset($this->session->userdata['logged_in'])) {
+            redirect('secure/dashboard', 'refresh');
+          }
         }
       } else {
         $data = array(
           'error_message' => 'Invalid Username or Password'
         );
-        $this->load->view('login', $data);
+        $this->login($data);
       }
     }
   }
 
-  // Logout from admin page
   public function logout() {
     // Removing session data
     $sess_array = array(
-      'username' => ''
+      'email' => '',
+      'student_id' => ''
     );
     $this->session->unset_userdata('logged_in', $sess_array);
     $data['message_display'] = 'Successfully Logout';
-    $this->load->view('login', $data);
+    $this->login($data);
   }
 }
 

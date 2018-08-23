@@ -6,7 +6,7 @@
 <body> -->
 <?php
   if (isset($this->session->userdata['logged_in'])) {
-    header("location: http://localhost/mstip/index.php/protected/dashboard");
+    header("location: http://localhost/mstip/index.php/secure/dashboard");
   }
 ?>
 <?php
