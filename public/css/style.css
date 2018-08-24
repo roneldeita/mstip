@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "Droid Sans";
+  src: url('../fonts/droid-sans-v6-latin-regular.woff2');
+}
+
 body{
   background: url('../images/bg-blue.png') left top repeat-x, url('../images/bg-noise.png') left top repeat;
   background-color: #cecece;
@@ -9,5 +14,48 @@ body{
   color: #333;
 }
 .head-container{
-  text-align: center
+  margin: 15px 0px;
+  text-align: center;
+}
+
+.head-container > img{
+  max-width:100%;
+  height: auto;
+}
+
+.container-body{
+  background-color: white;
+}
+
+@media (min-width: 1200px) {
+  .container{
+    min-width:1170px !important
+  }
+}
+
+.nav-pills .nav-link {
+  border-radius: 0px;
+  padding: 24px 43px 24px 43px;
+}
+@media screen and (max-width: 1200px) and (min-width: 1020px){
+  .nav-pills .nav-link {
+    padding: 24px;
+  }
+}
+
+#menu {
+  background: url('../images/nav-bg.png') repeat-x;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+#menu .nav-pills .nav-item{
+  border-right: 1px solid #2f3077;
+}
+#menu .nav-pills .nav-item .nav-link{
+  display: block;
+  font-size: 16px;
+  height: 63px;
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
 }

@@ -27,6 +27,7 @@ class Auth extends CI_Controller {
     $data['title'] = ucfirst('Register');
 
     $this->load->view('templates/header', $data);
+    $this->load->view('templates/guest-menu');
     $this->load->view('register');
     $this->load->view('templates/footer');
   }
@@ -36,6 +37,7 @@ class Auth extends CI_Controller {
     $data['title'] = ucfirst('Login');
 
     $this->load->view('templates/header', $data);
+    $this->load->view('templates/guest-menu');
     $this->load->view('login');
     $this->load->view('templates/footer');
   }

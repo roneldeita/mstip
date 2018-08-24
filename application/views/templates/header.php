@@ -9,7 +9,9 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url('../public/css/style.css'); ?>">
   </head>
   <body>
-     <div class="container">
-      <div class="border head-container">
-        <img src="<?php echo base_url('../public/images/mstip-head-logo.png')?>"/>
-      </div>
+    <div class="head-container">
+      <img src="<?php echo base_url('../public/images/mstip-head-logo.png')?>"/>
+    </div>
+    <div class="container container-body">
+      
+      

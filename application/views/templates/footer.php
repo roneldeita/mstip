@@ -1,5 +1,5 @@
     <hr/>
-    <div>&copy; 2015</div>
+    <div style="text-align:center">&copy; 2015</div>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
