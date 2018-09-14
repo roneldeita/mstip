@@ -1,5 +1,4 @@
-<?php
-
+<?php defined('BASEPATH') OR exit('No direct script access allowed');
 //session_start();
 
 
@@ -20,6 +19,8 @@ class Auth extends CI_Controller {
     $this->load->library('session');
     // Load database
     $this->load->model('users_model');
+    //load pasword libraru
+    //$this->load->library('password');
   }
   // Show registration page
   public function register($data = array()) {
@@ -29,6 +30,16 @@ class Auth extends CI_Controller {
     $this->load->view('templates/header', $data);
     $this->load->view('templates/guest-menu');
     $this->load->view('register');
+    $this->load->view('templates/footer');
+  }
+
+  // Show login page
+  public function index($data = array()) {
+    $data['title'] = ucfirst('Login');
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/guest-menu');
+    $this->load->view('login');
     $this->load->view('templates/footer');
   }
 
@@ -46,23 +57,30 @@ class Auth extends CI_Controller {
   public function new_user_registration() {
 
     // Check validation for user input in SignUp form
+    $this->form_validation->set_rules('role', 'Account Type', 'trim|required|xss_clean');
     $this->form_validation->set_rules('student_id', 'Student ID', 'trim|required|xss_clean');
+    $this->form_validation->set_rules('first_name', 'First Name', 'trim|required|xss_clean');
+    $this->form_validation->set_rules('last_name', 'Last Name', 'trim|required|xss_clean');
     $this->form_validation->set_rules('email', 'Email', 'trim|required|xss_clean');
     $this->form_validation->set_rules('password', 'Password', 'trim|min_length[6]|max_length[12]|required|xss_clean');
+    $this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required|matches[password]');
     $data = array(
+      'role' => $this->input->post('role'),
       'student_id' => $this->input->post('student_id'),
+      'first_name' => $this->input->post('first_name'),
+      'last_name' => $this->input->post('last_name'),
       'email' => $this->input->post('email'),
-      'password' => $this->input->post('password')
+      'password' => password_hash($this->input->post('passconf'), PASSWORD_BCRYPT)
     );
     if ($this->form_validation->run() == FALSE) {
         $this->register();
     } else {
       $result = $this->users_model->registration_insert($data);
       if ($result == TRUE) {
-        $data['message_display'] = 'Registration Successfully !';
+        $data['success_message'] = 'Registration Successful';
         $this->login($data);
       } else {
-        $data['message_display'] = 'Email already exist!';
+        $data['error_message'] = 'Email already exist';
         $this->register($data);
       }
     }
@@ -93,6 +111,9 @@ class Auth extends CI_Controller {
           $session_data = array(
             'email' => $result[0]->email,
             'student_id' => $result[0]->student_id,
+            'first_name' => $result[0]->first_name,
+            'last_name' => $result[0]->last_name,
+            'status' => $result[0]->status
           );
           // Add user data in session
           $this->session->set_userdata('logged_in', $session_data);
@@ -116,7 +137,7 @@ class Auth extends CI_Controller {
       'student_id' => ''
     );
     $this->session->unset_userdata('logged_in', $sess_array);
-    $data['message_display'] = 'Successfully Logout';
+    $data['success_message'] = 'Successfully logout';
     $this->login($data);
   }
 }

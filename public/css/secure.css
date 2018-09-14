@@ -1,0 +1,30 @@
+.dashboard .card{
+  border-radius: 0px
+}
+
+.dashboard .btn{
+  border: 1px solid #cecece;
+  border-radius: 0px;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+.dashboard .fa{
+  font-size: 42px;
+  color: #000154;
+}
+
+.jobs{
+  padding-bottom: 50px;
+}
+.jobs .card .card-img-top{
+  height: 15vh;
+  object-fit: cover;
+}
+.chat #chat-window {
+  height: 350px;
+  overflow: auto;
+}
+.chat .initial{
+  radius:20px
+}

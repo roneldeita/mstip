@@ -1,0 +1,23 @@
+.login .card,
+.register .card{
+  border-radius: 0px;
+}
+
+.login .card-header,
+.register .card-header{
+  border-radius: 0px;
+  /*background-color: #000154;*/
+  color: white;
+  font-size: 17px;
+}
+.login .form-control,
+.register .form-control{
+  border-radius: 0px;
+}
+.login .btn,
+.register .btn{
+  border: 1px solid #cecece;
+  border-radius: 0px;
+  padding-left: 18px;
+  padding-right: 18px;
+}
